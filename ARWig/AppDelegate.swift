@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  ARWig
+//  ArWig
 //
 //  Created by Esteban Arrúa on 11/9/18.
 //  Copyright © 2018 Hattrick It. All rights reserved.
@@ -12,10 +12,14 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var appCoordinator: AppCoordinator?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        window = UIWindow()
+        appCoordinator = AppCoordinator(window: window!)
+        _ = appCoordinator?.start()
+        
         return true
     }
 
