@@ -10,6 +10,14 @@
 		38F70EFA2195B9B9005E65E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70EF92195B9B9005E65E5 /* AppDelegate.swift */; };
 		38F70F012195B9BB005E65E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38F70F002195B9BB005E65E5 /* Assets.xcassets */; };
 		38F70F042195B9BB005E65E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38F70F022195B9BB005E65E5 /* LaunchScreen.storyboard */; };
+		38F70F112195BCA6005E65E5 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70F0E2195BCA6005E65E5 /* MainCoordinator.swift */; };
+		38F70F122195BCA6005E65E5 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70F0F2195BCA6005E65E5 /* BaseCoordinator.swift */; };
+		38F70F132195BCA6005E65E5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70F102195BCA6005E65E5 /* AppCoordinator.swift */; };
+		38F70F172195BCAF005E65E5 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70F152195BCAF005E65E5 /* BaseViewModel.swift */; };
+		38F70F1B2195BCB9005E65E5 /* FaceDetectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70F182195BCB9005E65E5 /* FaceDetectViewController.swift */; };
+		38F70F1C2195BCB9005E65E5 /* FaceDetectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38F70F192195BCB9005E65E5 /* FaceDetectViewController.xib */; };
+		38F70F202199EAE9005E65E5 /* FaceTrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70F1F2199EAE9005E65E5 /* FaceTrackingManager.swift */; };
+		38F70F22219A1337005E65E5 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F70F21219A1337005E65E5 /* CameraManager.swift */; };
 		CE53EAA4DD7E507B674B48DE /* Pods_ARWig.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2098AF6A206BD50DAEB4790 /* Pods_ARWig.framework */; };
 /* End PBXBuildFile section */
 
@@ -19,6 +27,14 @@
 		38F70F002195B9BB005E65E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		38F70F032195B9BB005E65E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		38F70F052195B9BB005E65E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38F70F0E2195BCA6005E65E5 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		38F70F0F2195BCA6005E65E5 /* BaseCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		38F70F102195BCA6005E65E5 /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		38F70F152195BCAF005E65E5 /* BaseViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		38F70F182195BCB9005E65E5 /* FaceDetectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceDetectViewController.swift; sourceTree = "<group>"; };
+		38F70F192195BCB9005E65E5 /* FaceDetectViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaceDetectViewController.xib; sourceTree = "<group>"; };
+		38F70F1F2199EAE9005E65E5 /* FaceTrackingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackingManager.swift; sourceTree = "<group>"; };
+		38F70F21219A1337005E65E5 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		9BFAFEB42C39C7722F7E664E /* Pods-ARWig.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWig.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARWig/Pods-ARWig.debug.xcconfig"; sourceTree = "<group>"; };
 		E2098AF6A206BD50DAEB4790 /* Pods_ARWig.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARWig.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E63A787C06E0DFAFB5CED735 /* Pods-ARWig.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWig.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARWig/Pods-ARWig.release.xcconfig"; sourceTree = "<group>"; };
@@ -57,12 +73,52 @@
 		38F70EF82195B9B9005E65E5 /* ARWig */ = {
 			isa = PBXGroup;
 			children = (
+				38F70F1E2199EA84005E65E5 /* Managers */,
+				38F70F0D2195BC36005E65E5 /* Coordinators */,
+				38F70F0C2195BC32005E65E5 /* Shared */,
+				38F70F0B2195BC28005E65E5 /* View Controllers */,
 				38F70EF92195B9B9005E65E5 /* AppDelegate.swift */,
 				38F70F002195B9BB005E65E5 /* Assets.xcassets */,
 				38F70F022195B9BB005E65E5 /* LaunchScreen.storyboard */,
 				38F70F052195B9BB005E65E5 /* Info.plist */,
 			);
 			path = ARWig;
+			sourceTree = "<group>";
+		};
+		38F70F0B2195BC28005E65E5 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				38F70F182195BCB9005E65E5 /* FaceDetectViewController.swift */,
+				38F70F192195BCB9005E65E5 /* FaceDetectViewController.xib */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		38F70F0C2195BC32005E65E5 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				38F70F152195BCAF005E65E5 /* BaseViewModel.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		38F70F0D2195BC36005E65E5 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				38F70F102195BCA6005E65E5 /* AppCoordinator.swift */,
+				38F70F0F2195BCA6005E65E5 /* BaseCoordinator.swift */,
+				38F70F0E2195BCA6005E65E5 /* MainCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		38F70F1E2199EA84005E65E5 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				38F70F1F2199EAE9005E65E5 /* FaceTrackingManager.swift */,
+				38F70F21219A1337005E65E5 /* CameraManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		796B15DD6E4784B78C6039BB /* Frameworks */ = {
@@ -144,6 +200,7 @@
 			files = (
 				38F70F042195B9BB005E65E5 /* LaunchScreen.storyboard in Resources */,
 				38F70F012195B9BB005E65E5 /* Assets.xcassets in Resources */,
+				38F70F1C2195BCB9005E65E5 /* FaceDetectViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,7 +252,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38F70F202199EAE9005E65E5 /* FaceTrackingManager.swift in Sources */,
+				38F70F132195BCA6005E65E5 /* AppCoordinator.swift in Sources */,
 				38F70EFA2195B9B9005E65E5 /* AppDelegate.swift in Sources */,
+				38F70F122195BCA6005E65E5 /* BaseCoordinator.swift in Sources */,
+				38F70F112195BCA6005E65E5 /* MainCoordinator.swift in Sources */,
+				38F70F172195BCAF005E65E5 /* BaseViewModel.swift in Sources */,
+				38F70F22219A1337005E65E5 /* CameraManager.swift in Sources */,
+				38F70F1B2195BCB9005E65E5 /* FaceDetectViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,6 +401,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S84RM8A475;
 				INFOPLIST_FILE = ARWig/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -356,6 +421,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S84RM8A475;
 				INFOPLIST_FILE = ARWig/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
