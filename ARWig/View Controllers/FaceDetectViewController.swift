@@ -11,24 +11,25 @@ import UIKit
 import AVKit
 import RxSwift
 import Vision
+import ARKit
 
 class FaceDetectViewController: UIViewController {
     
     // MARK: - Outlets
     
-    @IBOutlet weak var previewView: UIView!
+    @IBOutlet weak var previewView: ARSCNView!
     
     // MARK: - Properties
+    let faceProportion: Float = 1.5
+    let modelScale: Float = 140
     
     private let disposeBag = DisposeBag()
     
-    var resolution: CGSize?
-    var detectionOverlayLayer: CALayer?
-    var detectedFaceRectanglesShapeLayer: CAShapeLayer?
-    var detectedFaceLandmarksShapeLayer: CAShapeLayer?
+    var faces: [Face2D] = []
+    var timer: Timer!
+    var lastLineNode: [SCNNode] = []
     
     // MARK: - Setup
-    
     init() {
         super.init(nibName: String(describing: type(of: self)), bundle: nil)
     }
@@ -40,158 +41,61 @@ class FaceDetectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupCamera()
+        let scene = SCNScene()
+        previewView.scene = scene
+        previewView.automaticallyUpdatesLighting = true
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true, block: { [weak self] _ in
+            self?.faceTracking()
+        })
     }
     
-    func setupCamera() {
-        resolution = CameraManager.sharedInstance.setupCamera(view: self.previewView, delegate: self)
-        setupDrawingLayers()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let configuration = ARWorldTrackingConfiguration()
+        previewView.session.run(configuration)
     }
     
-    // MARK: Shape Layer Configuration
-    
-    fileprivate func setupDrawingLayers() {
-        guard let resolution = resolution else {
-            return
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        let captureDeviceBounds = CGRect(x: 0, y: 0, width: resolution.width, height: resolution.height)
-        let captureDeviceCenterPoint = CGPoint(x: captureDeviceBounds.midX, y: captureDeviceBounds.midY)
-        let normalizedCenterPoint = CGPoint(x: 0.5, y: 0.5)
-        
-        let rootLayer = self.previewView.layer
-        
-        let overlayLayer = CALayer()
-        overlayLayer.name = "DetectionOverlay"
-        overlayLayer.masksToBounds = true
-        overlayLayer.anchorPoint = normalizedCenterPoint
-        overlayLayer.bounds = captureDeviceBounds
-        overlayLayer.position = CGPoint(x: rootLayer.bounds.minX, y: rootLayer.bounds.midY)
-        
-        let faceRectangleShapeLayer = CAShapeLayer()
-        faceRectangleShapeLayer.name = "RectangleOutlineLayer"
-        faceRectangleShapeLayer.bounds = captureDeviceBounds
-        faceRectangleShapeLayer.anchorPoint = normalizedCenterPoint
-        faceRectangleShapeLayer.position = captureDeviceCenterPoint
-        faceRectangleShapeLayer.fillColor = nil
-        faceRectangleShapeLayer.strokeColor = UIColor.green.withAlphaComponent(0.7).cgColor
-        faceRectangleShapeLayer.lineWidth = 5
-        faceRectangleShapeLayer.shadowOpacity = 0.7
-        faceRectangleShapeLayer.shadowRadius = 5
-        
-        let faceLandmarksShapeLayer = CAShapeLayer()
-        faceLandmarksShapeLayer.name = "FaceLandmarksLayer"
-        faceLandmarksShapeLayer.bounds = captureDeviceBounds
-        faceLandmarksShapeLayer.anchorPoint = normalizedCenterPoint
-        faceLandmarksShapeLayer.position = captureDeviceCenterPoint
-        faceLandmarksShapeLayer.fillColor = nil
-        faceLandmarksShapeLayer.strokeColor = UIColor.yellow.withAlphaComponent(0.7).cgColor
-        faceLandmarksShapeLayer.lineWidth = 3
-        faceLandmarksShapeLayer.shadowOpacity = 0.7
-        faceLandmarksShapeLayer.shadowRadius = 5
-        
-        overlayLayer.addSublayer(faceRectangleShapeLayer)
-        faceRectangleShapeLayer.addSublayer(faceLandmarksShapeLayer)
-        rootLayer.addSublayer(overlayLayer)
-        
-        self.detectionOverlayLayer = overlayLayer
-        self.detectedFaceRectanglesShapeLayer = faceRectangleShapeLayer
-        self.detectedFaceLandmarksShapeLayer = faceLandmarksShapeLayer
-        
-        self.updateLayerGeometry()
+        previewView.session.pause()
     }
     
-    fileprivate func updateLayerGeometry() {
-        guard let overlayLayer = self.detectionOverlayLayer,
-            let previewLayer = CameraManager.sharedInstance.previewLayer,
-            let resolution = resolution else {
-                return
-        }
-        let rootLayer = self.previewView.layer
-        
-        CATransaction.setValue(NSNumber(value: true), forKey: kCATransactionDisableActions)
-        
-        let videoPreviewRect = previewLayer.layerRectConverted(fromMetadataOutputRect: CGRect(x: 0, y: 0, width: 1, height: 1))
-        
-        var rotation: CGFloat
-        var scaleX: CGFloat
-        var scaleY: CGFloat
-        
-        // Rotate the layer into screen orientation.
-        switch UIDevice.current.orientation {
-        case .portraitUpsideDown:
-            rotation = 180
-            scaleX = videoPreviewRect.width / resolution.width
-            scaleY = videoPreviewRect.height / resolution.height
-            
-        case .landscapeLeft:
-            rotation = 90
-            scaleX = videoPreviewRect.height / resolution.width
-            scaleY = scaleX
-            
-        case .landscapeRight:
-            rotation = -90
-            scaleX = videoPreviewRect.height / resolution.width
-            scaleY = scaleX
-            
-        default:
-            rotation = 0
-            scaleX = videoPreviewRect.width / resolution.width
-            scaleY = videoPreviewRect.height / resolution.height
-        }
-        
-        // Scale and mirror the image to ensure upright presentation.
-        let affineTransform = CGAffineTransform(rotationAngle: radiansForDegrees(rotation))
-            .scaledBy(x: scaleX, y: -scaleY)
-        overlayLayer.setAffineTransform(affineTransform)
-        
-        // Cover entire screen UI.
-        let rootLayerBounds = rootLayer.bounds
-        overlayLayer.position = CGPoint(x: rootLayerBounds.midX, y: rootLayerBounds.midY)
-    }
-    
-    fileprivate func radiansForDegrees(_ degrees: CGFloat) -> CGFloat {
-        return CGFloat(Double(degrees) * Double.pi / 180.0)
-    }
-    
-    // MARK: - Draw Bonding Boxes
-    
-    fileprivate func drawFaceObservations(_ faceObservations: [VNFaceObservation]) {
-        guard let faceRectangleShapeLayer = self.detectedFaceRectanglesShapeLayer,
-            let faceLandmarksShapeLayer = self.detectedFaceLandmarksShapeLayer,
-            let resolution = resolution else {
-                return
-        }
-        
-        CATransaction.begin()
-        
-        CATransaction.setValue(NSNumber(value: true), forKey: kCATransactionDisableActions)
-        
-        let paths = FaceTrackingManager.sharedInstance.getFacesPaths(faceObservations, resolution: resolution)
-        
-        if paths.count >= 2 {
-            faceRectangleShapeLayer.path = paths[0]
-            faceLandmarksShapeLayer.path = paths[1]
-        }
-        
-        self.updateLayerGeometry()
-        
-        CATransaction.commit()
-    }
-    
-}
-
-extension FaceDetectViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+    fileprivate func faceTracking() {
+        guard let pixelBuffer = previewView.session.currentFrame?.capturedImage else {
             return
         }
         
         let bondingBoxes = FaceTrackingManager.sharedInstance.trackFaces(pixelBuffer: pixelBuffer)
         
-        DispatchQueue.main.async {
-            self.drawFaceObservations(bondingBoxes)
+        let resolution = CGSize(width: previewView.bounds.width, height: previewView.bounds.height)
+        faces = FaceTrackingManager.sharedInstance.getFacesPaths(bondingBoxes, resolution: resolution)
+        
+        var index = 0
+        for face in self.faces {
+            if let face3D = Face3D(withFace2D: face, view: self.previewView) {
+                let hattrickNode = ModelsManager.sharedInstance.getNode(forIndex: index)
+                if hattrickNode.parent == nil {
+                    hattrickNode.position = face3D.btwEyes
+                    hattrickNode.position.y += face3D.getFaceSize() * faceProportion
+                    hattrickNode.infiniteRotation(x: 0, y: Float.pi, z: 0, duration: 5.0)
+                } else {
+                    let move = SCNAction.moveBy(x: CGFloat(face3D.btwEyes.x - hattrickNode.position.x), y: CGFloat(face3D.btwEyes.y + face3D.getFaceSize() * faceProportion - hattrickNode.position.y), z: CGFloat(face3D.btwEyes.z - hattrickNode.position.z), duration: 0.05)
+                    hattrickNode.runAction(move)
+                }
+                hattrickNode.scale = SCNVector3(face3D.getFaceSize() * modelScale, face3D.getFaceSize() * modelScale, face3D.getFaceSize() * modelScale)
+                
+                self.previewView.scene.rootNode.addChildNode(hattrickNode)
+                
+                index += 1
+            }
+        }
+        
+        let releasedNodes = ModelsManager.sharedInstance.releaseNodes(fromIndex: index)
+        for node in releasedNodes {
+            node.removeAllActions()
         }
     }
     
