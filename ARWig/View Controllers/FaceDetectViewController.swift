@@ -45,7 +45,7 @@ class FaceDetectViewController: UIViewController {
         previewView.scene = scene
         previewView.automaticallyUpdatesLighting = true
         
-        timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true, block: { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
             self?.faceTracking()
         })
     }
@@ -64,38 +64,48 @@ class FaceDetectViewController: UIViewController {
     }
     
     fileprivate func faceTracking() {
-        guard let pixelBuffer = previewView.session.currentFrame?.capturedImage else {
+        guard let frame = previewView.session.currentFrame else {
             return
         }
         
-        let bondingBoxes = FaceTrackingManager.sharedInstance.trackFaces(pixelBuffer: pixelBuffer)
+        let pixelBuffer = frame.capturedImage
         
-        let resolution = CGSize(width: previewView.bounds.width, height: previewView.bounds.height)
-        faces = FaceTrackingManager.sharedInstance.getFacesPaths(bondingBoxes, resolution: resolution)
-        
-        var index = 0
-        for face in self.faces {
-            if let face3D = Face3D(withFace2D: face, view: self.previewView) {
+        if case .normal = frame.camera.trackingState {
+            let bondingBoxes = FaceTrackingManager.sharedInstance.trackFaces(pixelBuffer: pixelBuffer)
+            
+            let resolution = CGSize(width: previewView.bounds.width, height: previewView.bounds.height)
+            faces = FaceTrackingManager.sharedInstance.getFacesPaths(bondingBoxes, resolution: resolution)
+            
+            var index = 0
+            for face2D in self.faces {
+                if let face3D = Face3D(withFace2D: face2D, view: self.previewView) {
+                    FaceManager.sharedInstance.addNewFace(face2D: face2D, face3D: face3D)
+                }
+            }
+            
+            FaceManager.sharedInstance.deleteUnusedFaces()
+            for face in FaceManager.sharedInstance.lastFaces {
+                let facePosition = face.getPosition()
                 let hattrickNode = ModelsManager.sharedInstance.getNode(forIndex: index)
                 if hattrickNode.parent == nil {
-                    hattrickNode.position = face3D.btwEyes
-                    hattrickNode.position.y += face3D.getFaceSize() * faceProportion
+                    hattrickNode.position = facePosition
+                    hattrickNode.position.y += face.getFaceSize() * faceProportion
                     hattrickNode.infiniteRotation(x: 0, y: Float.pi, z: 0, duration: 5.0)
                 } else {
-                    let move = SCNAction.moveBy(x: CGFloat(face3D.btwEyes.x - hattrickNode.position.x), y: CGFloat(face3D.btwEyes.y + face3D.getFaceSize() * faceProportion - hattrickNode.position.y), z: CGFloat(face3D.btwEyes.z - hattrickNode.position.z), duration: 0.05)
+                    let move = SCNAction.moveBy(x: CGFloat(facePosition.x - hattrickNode.position.x), y: CGFloat(facePosition.y + face.getFaceSize() * faceProportion - hattrickNode.position.y), z: CGFloat(facePosition.z - hattrickNode.position.z), duration: 0.05)
                     hattrickNode.runAction(move)
                 }
-                hattrickNode.scale = SCNVector3(face3D.getFaceSize() * modelScale, face3D.getFaceSize() * modelScale, face3D.getFaceSize() * modelScale)
+                hattrickNode.scale = SCNVector3(face.getFaceSize() * modelScale, face.getFaceSize() * modelScale, face.getFaceSize() * modelScale)
                 
                 self.previewView.scene.rootNode.addChildNode(hattrickNode)
                 
                 index += 1
             }
-        }
-        
-        let releasedNodes = ModelsManager.sharedInstance.releaseNodes(fromIndex: index)
-        for node in releasedNodes {
-            node.removeAllActions()
+            
+            let releasedNodes = ModelsManager.sharedInstance.releaseNodes(fromIndex: index)
+            for node in releasedNodes {
+                node.removeAllActions()
+            }
         }
     }
     

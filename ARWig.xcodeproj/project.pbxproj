@@ -10,6 +10,9 @@
 		38029B78219DB7CF00EEDA8B /* Face2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38029B77219DB7CF00EEDA8B /* Face2D.swift */; };
 		38029B7A219DE97800EEDA8B /* Face3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38029B79219DE97800EEDA8B /* Face3D.swift */; };
 		388F133A21C82EEE00393584 /* SCNNode+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388F133921C82EEE00393584 /* SCNNode+Animations.swift */; };
+		388F453A21C978AA0006B10C /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388F453921C978AA0006B10C /* Face.swift */; };
+		388F453C21C97B7C0006B10C /* FaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388F453B21C97B7C0006B10C /* FaceManager.swift */; };
+		388F453E21C989100006B10C /* CGPoint+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388F453D21C989100006B10C /* CGPoint+Arithmetic.swift */; };
 		38A85E6021A482B300E09C59 /* ModelsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A85E5F21A482B300E09C59 /* ModelsManager.swift */; };
 		38A85E6321A58E2600E09C59 /* SCNVector3+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A85E6221A58E2600E09C59 /* SCNVector3+Arithmetic.swift */; };
 		38A85E6521A713CE00E09C59 /* SCNGeometry+Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A85E6421A713CE00E09C59 /* SCNGeometry+Line.swift */; };
@@ -33,6 +36,9 @@
 		3805994221C2A72E00FC096D /* FaceDetectViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FaceDetectViewController.xib; sourceTree = "<group>"; };
 		3805994321C2A72E00FC096D /* FaceDetectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectViewController.swift; sourceTree = "<group>"; };
 		388F133921C82EEE00393584 /* SCNNode+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNNode+Animations.swift"; sourceTree = "<group>"; };
+		388F453921C978AA0006B10C /* Face.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Face.swift; sourceTree = "<group>"; };
+		388F453B21C97B7C0006B10C /* FaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceManager.swift; sourceTree = "<group>"; };
+		388F453D21C989100006B10C /* CGPoint+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Arithmetic.swift"; sourceTree = "<group>"; };
 		38A85E5F21A482B300E09C59 /* ModelsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsManager.swift; sourceTree = "<group>"; };
 		38A85E6221A58E2600E09C59 /* SCNVector3+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNVector3+Arithmetic.swift"; sourceTree = "<group>"; };
 		38A85E6421A713CE00E09C59 /* SCNGeometry+Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNGeometry+Line.swift"; sourceTree = "<group>"; };
@@ -69,6 +75,7 @@
 			children = (
 				38029B77219DB7CF00EEDA8B /* Face2D.swift */,
 				38029B79219DE97800EEDA8B /* Face3D.swift */,
+				388F453921C978AA0006B10C /* Face.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -88,6 +95,7 @@
 				38A85E6221A58E2600E09C59 /* SCNVector3+Arithmetic.swift */,
 				38A85E6421A713CE00E09C59 /* SCNGeometry+Line.swift */,
 				388F133921C82EEE00393584 /* SCNNode+Animations.swift */,
+				388F453D21C989100006B10C /* CGPoint+Arithmetic.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -151,6 +159,7 @@
 			children = (
 				38F70F1F2199EAE9005E65E5 /* FaceTrackingManager.swift */,
 				38A85E5F21A482B300E09C59 /* ModelsManager.swift */,
+				388F453B21C97B7C0006B10C /* FaceManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -287,7 +296,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				388F453A21C978AA0006B10C /* Face.swift in Sources */,
 				388F133A21C82EEE00393584 /* SCNNode+Animations.swift in Sources */,
+				388F453C21C97B7C0006B10C /* FaceManager.swift in Sources */,
 				38F70F202199EAE9005E65E5 /* FaceTrackingManager.swift in Sources */,
 				38A85E6321A58E2600E09C59 /* SCNVector3+Arithmetic.swift in Sources */,
 				38F70F132195BCA6005E65E5 /* AppCoordinator.swift in Sources */,
@@ -297,6 +308,7 @@
 				38F70F112195BCA6005E65E5 /* MainCoordinator.swift in Sources */,
 				38F70F172195BCAF005E65E5 /* BaseViewModel.swift in Sources */,
 				38D9EF0421C2C0FF00657BE7 /* FaceDetectViewController.swift in Sources */,
+				388F453E21C989100006B10C /* CGPoint+Arithmetic.swift in Sources */,
 				38A85E6021A482B300E09C59 /* ModelsManager.swift in Sources */,
 				38029B7A219DE97800EEDA8B /* Face3D.swift in Sources */,
 				38A85E6521A713CE00E09C59 /* SCNGeometry+Line.swift in Sources */,
