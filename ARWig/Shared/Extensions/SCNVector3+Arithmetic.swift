@@ -49,4 +49,30 @@ extension SCNVector3 {
         return SCNVector3Make(vector.x * scalar, vector.y * scalar, vector.z * scalar)
     }
     
+    static func / (vector: SCNVector3, scalar: Float) -> SCNVector3 {
+        return SCNVector3Make(vector.x / scalar, vector.y / scalar, vector.z / scalar)
+    }
+    
+    static func distance(from left: SCNVector3, to right: SCNVector3) -> Float {
+        let xDist = (left.x - right.x)
+        let yDist = (left.y - right.y)
+        let zDist = (left.z - right.z)
+        return sqrt(pow(xDist, 2) + pow(yDist, 2) + pow(zDist, 2))
+    }
+    
+    static func midpoint(of points: [SCNVector3]) -> SCNVector3 {
+        var vector = SCNVector3Make(0, 0, 0)
+        
+        guard points.count != 0 else {
+            return SCNVector3Zero
+        }
+        
+        for point in points {
+            vector += point
+        }
+        
+        vector = vector / Float(points.count)
+        return vector
+    }
+    
 }

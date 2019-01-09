@@ -29,6 +29,7 @@ class ModelsManager {
                 fatalError("Hattrick node doesn't exist.")
             }
             
+            hattrickNode.removeFromParentNode()
             models.append(hattrickNode)
             return hattrickNode
         } else {
