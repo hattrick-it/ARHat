@@ -26,6 +26,8 @@ class MainCoordinator: BaseCoordinator<Void> {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
+        navigationController.setNavigationBarHidden(true, animated: true)
+        
         return Observable.never()
     }
     

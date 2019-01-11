@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import AVKit
-import RxSwift
 import Vision
 import ARKit
 
@@ -22,8 +21,6 @@ class FaceDetectViewController: UIViewController {
     // MARK: - Properties
     let faceProportion: Float = 1.5
     let modelScale: Float = 140
-    
-    private let disposeBag = DisposeBag()
     
     var faces: [Face2D] = []
     var timer: Timer!
@@ -74,7 +71,7 @@ class FaceDetectViewController: UIViewController {
             let bondingBoxes = FaceTrackingManager.sharedInstance.trackFaces(pixelBuffer: pixelBuffer)
             
             let resolution = CGSize(width: previewView.bounds.width, height: previewView.bounds.height)
-            faces = FaceTrackingManager.sharedInstance.getFacesPaths(bondingBoxes, resolution: resolution)
+            faces = FaceTrackingManager.sharedInstance.getFaces(bondingBoxes, resolution: resolution)
             
             var index = 0
             for face2D in self.faces {

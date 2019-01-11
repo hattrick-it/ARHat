@@ -3,7 +3,7 @@ def shared_pods
     pod 'RxCocoa',    '~> 4.0'
 end
 
-target 'ARWig' do
+target 'ARHat' do
   use_frameworks!
 
   shared_pods
