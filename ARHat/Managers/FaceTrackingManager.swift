@@ -34,7 +34,7 @@ class FaceTrackingManager {
         return bondingBoxes
     }
     
-    func getFacesPaths(_ faceObservations: [VNFaceObservation], resolution: CGSize) -> [Face2D] {
+    func getFaces(_ faceObservations: [VNFaceObservation], resolution: CGSize) -> [Face2D] {
         var faces: [Face2D?] = []
         
         for faceObservation in faceObservations {
